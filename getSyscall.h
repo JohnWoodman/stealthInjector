@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "Windows.h"
+#include "windows.h"
 #include "winternl.h"
 #pragma comment(lib, "ntdll")
 
@@ -32,7 +32,7 @@ BOOL GetSyscallStub(LPCSTR functionName, LPVOID syscallStub)
 
 	for (int i = 0; i < imageNTHeaders->FileHeader.NumberOfSections; i++)
 	{
-		if (std::strcmp((CHAR*)section->Name, (CHAR*)".rdata") == 0) {
+		if (strcmp((CHAR*)section->Name, (CHAR*)".rdata") == 0) {
 			rdataSection = section;
 			break;
 		}
@@ -50,9 +50,9 @@ BOOL GetSyscallStub(LPCSTR functionName, LPVOID syscallStub)
 		DWORD_PTR functionNameVA = (DWORD_PTR)RVAtoRawOffset((DWORD_PTR)fileData + addressOfNames[i], rdataSection);
 		DWORD_PTR functionVA = (DWORD_PTR)RVAtoRawOffset((DWORD_PTR)fileData + addressOfFunctions[i + 1], textSection);
 		LPCSTR functionNameResolved = (LPCSTR)functionNameVA;
-		if (std::strcmp(functionNameResolved, functionName) == 0)
+		if (strcmp(functionNameResolved, functionName) == 0)
 		{
-			std::memcpy(syscallStub, (LPVOID)functionVA, SYSCALL_STUB_SIZE);
+			memcpy(syscallStub, (LPVOID)functionVA, SYSCALL_STUB_SIZE);
 			stubFound = TRUE;
 		}
 	}
