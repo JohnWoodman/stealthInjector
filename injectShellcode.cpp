@@ -1,14 +1,6 @@
 #include <iostream>
-#include "windows.h"
-#include "winternl.h"
 #include "getSyscall.h"
-#include <fstream>
-#include <iostream>
-#include <fstream>
-#include <string.h>
-#include <string>
-#include <fstream>
-#include <sstream>
+
 #define UNICODE 1
 #pragma comment(lib, "ntdll")
 
@@ -199,6 +191,11 @@ int main(int argc, char* argv[]) {
 	bool spawnProc = false;
 	bool unsafe = false;
 	int PID = 0;
+
+	if (argc < 2) {
+		printf("[-] Error: No flags given. Use -h to view help page\n");
+		return 0;
+	}
 
 	for (int i = 0; i < argc; i++) {
 		if (strcmp(argv[i], "-h") == 0) {
