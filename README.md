@@ -8,9 +8,10 @@ The syscalls are retrieved dynamically through reading ntdll.dll instead of usin
 ## Usage
 
 ```
-Usage: stealthInjector.exe [-spawnProc | -pid <num>] [-unsafe]
+Usage: stealthInjector.exe -shellcode <file> [-spawnProc | -pid <num>] [-unsafe]
 
 -spawnProc: spawn nslookup.exe and inject into that
 -pid <num>: inject into remote process given PID
 -unsafe: inject shellcode using high-level API calls (likely to get caught by AV/EDR)
+-shellcode <file>: raw shellcode to inject
 ```
